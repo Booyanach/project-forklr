@@ -32,7 +32,6 @@ app.post('/insert', function(req, resp) {
 });
 
 app.get('fetch/:name', function(req, resp) {
-    console.log('requesting:', req.params.name);
     if (req.params.name) {
         redisCli.get(req.params.name, function(err, reply) {
             resp.json({url:reply});
@@ -41,7 +40,6 @@ app.get('fetch/:name', function(req, resp) {
 });
 
 app.get('/:name', function(req, resp) {
-    console.log('requesting:', req.params.name);
     if (req.params.name) {
         redisCli.get(req.params.name, function(err, reply) {
             resp.redirect(reply);
@@ -49,10 +47,6 @@ app.get('/:name', function(req, resp) {
     }
 });
 
-redisCli.on('connect', function() {
-    console.log('redis cli, connected');
-});
-
-app.listen(80);
+app.listen(8087);
 
 console.log('Express listening on port 80');
