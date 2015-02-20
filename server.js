@@ -5,7 +5,8 @@ var express = require('express'),
     casual = require('casual'),
     sprintf=require('sprintf').sprintf,
     redisCli = redis.createClient(),
-    fs=require('fs');
+    fs=require('fs'),
+    redisObj = {};
 
 app.use(express.static(__dirname, '/'));
 app.use(bodyParser.json());
@@ -16,8 +17,18 @@ String.prototype.capitalize = function () {
 
 };
 
+// Init the Object
+getList();
+
 app.post('/insert', function(req, resp) {
-    if (req.body.url) {
+    var checker = existsInRedis(req.body.url);
+    console.log(checker);
+    if (req.body.url && checker) {
+        resp.json({
+            message: 'Already exists',
+            shortUrl: checker
+        });
+    } else {
         var newName = casual.sentence.split(' ').map(function (text) {
             text = text.replace(/[^a-zA-Z0-9 -]/g, "");
             return text.capitalize();
@@ -29,6 +40,7 @@ app.post('/insert', function(req, resp) {
             });
         });
     }
+    getList();
 });
 
 app.get('/url/:name', function(req, resp) {
@@ -40,18 +52,32 @@ app.get('/url/:name', function(req, resp) {
 });
 
 app.get('/list', function (req, res) {
+    getList(res);
+});
+
+function getList(res) {
+    var returnObj = {},
+        out = true;
     redisCli.keys('*', function (err, keys) {
-        returnObj = {};
         keys.map(function (key, idx) {
             redisCli.get(key, function(err, reply) {
                 returnObj[key] = reply;
                 if (idx === keys.length -1) {
-                    res.json(returnObj);
+                    redisObj = returnObj;
+                    if (res) res.json(returnObj);
                 }
             });
         });
     });
-});
+}
+
+function existsInRedis(url) {
+    var returnKey = '';
+    Object.keys(redisObj).filter(function (key) {
+        if (redisObj[key] === url) returnKey = key;
+    });
+    return returnKey;
+}
 
 app.listen(8087);
 

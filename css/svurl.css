@@ -9,72 +9,107 @@ body {
 }
 
 header {
-    background-color: #656565;
-    color: #FFFFFF;
+    color: #FFF;
+    height: 40px;
     padding: 15px;
+    line-height: 40px;
+    border-bottom: 2px solid #656565;
+    background-color: #242424;
 }
 
 header .menu {
-    position: absolute;
-    right: 0;
-    top: 0;
-    margin: 20px;
-    padding: 5px;
+    float: right;
+    margin: -15px;
+    padding: 17px;
+    border-left: 1px solid #4D8ECD;
+}
+
+header .logo {
+    float: left;
+    clear: none;
+    width: 40px;
+    height: 40px;
+    margin: 0 20px;
+}
+
+header h1 {
+    clear: none;
+    width: auto;
+    float: left;
 }
 
 .menu .button {
     float: left;
-    margin: 5px;
     width: 25px;
     height: 25px;
-    line-height: 25px;
-    text-align: center;
+    margin: 5px;
     border: 1px solid #FFFFFF;
+    cursor: pointer;
+    text-align: center;
+    line-height: 25px;
     border-radius: 3px;
+}
+
+.button img {
+    width: 20px;
+    height: 20px;
+    margin-top: 2px;
 }
 
 .menu .button:hover {
     color: #656565;
-    background-color: #FFFFFF;
     border-color: #959595;
+    background-color: #FFFFFF;
 }
 
 content .creator, content .result {
-    margin: 150px auto;
     width: 900px;
     color: #FFFFFF;
+    margin: 150px auto;
     font-size: 42px;
     text-align: center;
 }
 
 input {
-    margin: 10px;
+    margin-top: 20px;
 }
 
 input.url {
-    padding: 15px;
+    width: 735px;
+    float: left;
     border: 0;
+    padding: 15px;
     font-size: 22px;
     font-weight: 600;
-    width: 100%;
     border-radius: 5px;
     background-color: #FFFFFF;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+input.url[name="result"] {
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 5px;
 }
 
 input#submit {
-    padding: 15px;
+    float: right;
+    color: #656565;
     border: 0;
-    font-size: 38px;
-    color: #FFFFFF;
-    background-color: #656565;
+    padding: 15px;
+    font-size: 22px;
+    border-left: 1px solid #F2F2F2;
     border-radius: 5px;
-    border: 3px solid #858585;
+    background-color: #FFFFFF;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
 }
 
 input#submit:hover {
+    color: #353535;
     cursor: pointer;
-    background-color: #454545;
-    border: 3px solid #656565;
+    background-color: #F2F2F2;
 }
 
 .result {

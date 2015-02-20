@@ -8,4 +8,10 @@ $(function() {
             $('.creator').hide();
         });
     });
+
+    $('.menu .shortener').on('click', function () {
+        $('.result').hide();
+        $('.creator').show();
+        $('.url').val('');
+    });
 });
