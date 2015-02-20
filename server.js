@@ -31,20 +31,26 @@ app.post('/insert', function(req, resp) {
     }
 });
 
-app.get('fetch/:name', function(req, resp) {
-    if (req.params.name) {
-        redisCli.get(req.params.name, function(err, reply) {
-            resp.json({url:reply});
-        });
-    }
-});
-
-app.get('/:name', function(req, resp) {
+app.get('/url/:name', function(req, resp) {
     if (req.params.name) {
         redisCli.get(req.params.name, function(err, reply) {
             resp.redirect(reply);
         });
     }
+});
+
+app.get('/list', function (req, res) {
+    redisCli.keys('*', function (err, keys) {
+        returnObj = {};
+        keys.map(function (key, idx) {
+            redisCli.get(key, function(err, reply) {
+                returnObj[key] = reply;
+                if (idx === keys.length -1) {
+                    res.json(returnObj);
+                }
+            });
+        });
+    });
 });
 
 app.listen(8087);
