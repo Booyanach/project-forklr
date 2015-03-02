@@ -2,11 +2,46 @@ var express = require('express'),
     redis = require('redis'),
     app = express(),
     bodyParser = require('body-parser'),
-    casual = require('casual'),
+    rant = require('rantjs'),
     sprintf=require('sprintf').sprintf,
     redisCli = redis.createClient(),
     fs=require('fs'),
-    redisObj = {};
+    redisObj = {},
+    words = [
+        '<preposition>',
+        '<firstname>',
+        '<activity>',
+        '<adj>',
+        '<adv>',
+        '<amount>',
+        '<color>',
+        '<conj>',
+        '<country>',
+        '<emo>',
+        '<em>',
+        '<face>',
+        '<greet>',
+        '<surname>',
+        '<noun>',
+        '<sound>',
+        '<title>',
+        '<place>',
+        '<prefix>',
+        '<prepos>',
+        '<pron>',
+        '<quality>',
+        '<rel>',
+        '<sconj>',
+        '<substance>',
+        '<timeadv>',
+        '<timenoun>',
+        '<unit>',
+        '<verbimg>',
+        '<say>',
+        '<verb>',
+        '<vocal>',
+        '<yn>'
+    ];
 
 app.use(express.static(__dirname, '/'));
 app.use(bodyParser.json());
@@ -22,14 +57,13 @@ getList();
 
 app.post('/insert', function(req, resp) {
     var checker = existsInRedis(req.body.url);
-    console.log(checker);
     if (req.body.url && checker) {
         resp.json({
             message: 'Already exists',
             shortUrl: checker
         });
     } else {
-        var newName = casual.sentence.split(' ').map(function (text) {
+        var newName = rant(generateString()).split(' ').map(function (text) {
             text = text.replace(/[^a-zA-Z0-9 -]/g, "");
             return text.capitalize();
         }).join('');
@@ -42,6 +76,18 @@ app.post('/insert', function(req, resp) {
     }
     getList();
 });
+
+function generateString() {
+    var returnVal = '';
+    for (var i = 0; i < 5; i++) {
+        var item = getItem();
+        returnVal += ' ' + words[item];
+        function getItem() {
+            return Math.floor(Math.random() * (words.length - 1));
+        }
+    }
+    return returnVal;
+}
 
 app.get('/url/:name', function(req, resp) {
     if (req.params.name) {
