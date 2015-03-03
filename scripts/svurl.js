@@ -22,6 +22,8 @@ $(function() {
         $('.page.visible').removeClass('visible');
         $('.page.' + $(this).attr('target-url')).addClass('visible');
 
+        if ($(this).attr('target-url') === 'list') loadList();
+
         $('.result').removeClass('visible');
         $('.url').val('');
     });
@@ -30,4 +32,24 @@ $(function() {
             $('.page.' + $(this).attr('target-url')).addClass('visible');
         }
     });
+
+    function loadList() {
+        $.get('/list', {}, function (response) {
+            console.log(response);
+            var table = $('<table/>'),
+                tbody = $('<tbody/>').appendTo(table);
+
+                $.each(response, function (item, idx) {
+                    if (idx.indexOf('http') > -1) {
+                        var row = $('<tr/>').appendTo(tbody);
+
+                            $('<td/>').text(item).appendTo(row);
+                            $('<td/>').text(idx).appendTo(row);
+                    }
+                });
+
+                table.appendTo($('.page.list'));
+            // $('.page.list').text(JSON.stringify(response));
+        });
+    }
 });
