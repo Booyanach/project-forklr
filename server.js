@@ -56,20 +56,29 @@ String.prototype.capitalize = function () {
 getList();
 
 app.post('/insert', function(req, resp) {
-    var checker = existsInRedis(req.body.url);
+    var type = req.body.type === 'crl' ? req.body.type + ':' : '',
+        checker = existsInRedis(req.body.url);
+
     if (req.body.url && checker) {
         resp.json({
             message: 'Already exists',
             shortUrl: checker
         });
     } else {
-        var newName = rant(generateString()).split(' ').map(function (text) {
-            text = text.replace(/[^a-zA-Z0-9 -]/g, "");
-            return text.capitalize();
-        }).join('');
-        redisCli.set(newName, req.body.url, function() {
+        var newName = '';
+
+        if (req.body.type === 'crl') {
+            newName = Math.random().toString(36).substring(6);
+        } else {
+            newName = rant(generateString()).split(' ').map(function (text) {
+                text = text.replace(/[^a-zA-Z0-9 -]/g, "");
+                return text.capitalize();
+            }).join('');
+        }
+        redisCli.set(type + newName, req.body.url, function() {
             resp.json({
                 message: 'inserted successfuly',
+                type: req.body.type,
                 shortUrl: newName
             });
         });
@@ -92,6 +101,14 @@ function generateString() {
 app.get('/url/:name', function(req, resp) {
     if (req.params.name) {
         redisCli.get(req.params.name, function(err, reply) {
+            resp.redirect(reply);
+        });
+    }
+});
+
+app.get('/crl/:name', function(req, resp) {
+    if (req.params.name) {
+        redisCli.get('crl:' + req.params.name, function(err, reply) {
             resp.redirect(reply);
         });
     }

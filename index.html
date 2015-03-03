@@ -11,22 +11,34 @@
         <img class="logo" src="imgs/dickbutt.png"/>
         <h1> svURL shortener </h1>
         <div class="menu">
-            <div class="button shortener">
+            <div class="button shortener selected" target-url="url">
+                <img src="imgs/dickbutt.png"/>
+            </div>
+            <div class="button charles shortener" target-url="crl">
                 <img src="imgs/dickbutt.png"/>
             </div>
         </div>
     </header>
     <content>
-        <div class="creator">
+        <div class="creator page url">
             <div>
                 Shortener tool
             </div>
             <div>
                 <input type="text" name="url" class="url" id="url">
-                <input type="button" name="submit" id="submit" value="svShorten!">
+                <input type="button" class="submit" name="submit" target="url" value="Shorten!">
             </div>
         </div>
-        <div class="result">
+        <div class="creator page crl">
+            <div>
+                Charles' shortener tool
+            </div>
+            <div>
+                <input type="text" name="url" class="url" id="crl">
+                <input type="button" class="submit" name="submit" target="crl" value="crlShorten!">
+            </div>
+        </div>
+        <div class="result page">
             <div>your short url is:</div>
             <input type="text" name="result" class="url" id="newUrl">
         </div>
