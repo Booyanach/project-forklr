@@ -101,7 +101,7 @@ input.url[name="result"] {
     border-radius: 5px;
 }
 
-input#submit {
+input.submit {
     float: right;
     color: #656565;
     border: 0;
@@ -114,7 +114,7 @@ input#submit {
     border-bottom-left-radius: 0;
 }
 
-input#submit:hover {
+input.submit:hover {
     color: #353535;
     cursor: pointer;
     background-color: #F2F2F2;
