@@ -3,10 +3,13 @@
 <head>
     <title></title>
     <link rel="stylesheet" type="text/css" href="css/svurl.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script type="text/javascript" src="scripts/svurl.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js">
+    </script>
+    <script
+    src="https://ajax.googleapis.com/ajax/libs/angular_material/0.8.2/angular-material.min.js">
+    </script>
 </head>
-<body>
+<body ng-app="svurl">
     <header>
         <img class="logo" src="imgs/dickbutt.png"/>
         <h1> svURL shortener </h1>
@@ -23,31 +26,23 @@
         </div>
     </header>
     <content>
-        <div class="creator page url">
-            <div>
-                Shortener tool
-            </div>
-            <div>
-                <input type="text" name="url" class="url" id="url">
-                <input type="button" class="submit" name="submit" target="url" value="Shorten!">
-            </div>
-        </div>
-        <div class="creator page crl">
-            <div>
-                Charles' shortener tool
-            </div>
-            <div>
-                <input type="text" name="url" class="url" id="crl">
-                <input type="button" class="submit" name="submit" target="crl" value="Shorten!">
-            </div>
-        </div>
-        <div class="result page">
-            <div>your short url is:</div>
-            <input type="text" name="result" class="url" id="newUrl">
-        </div>
-        <div class="list page">
-            <div>All saved URLs</div>
+        <div class="creator page" ng-controller="urlController as url">
+            <url-page ng-repeat="(key, page) in url.pages" class="{{page.visible ? 'visible' : ''}}">
+                <div>
+                    {{key}}
+                </div>
+                <div ng-if="page.input">
+                    <input type="text" name="{{page.input.url}}" class="url" id="{{page.input.url}}">
+                    <input type="button" class="submit" name="submit" target="{{page.input.url}}" value="Shorten!" ng-click="url.insertUrl(page.input.url)">
+                </div>
+                <div ng-if="page.result">
+                    <input type="text" name="result" class="url" id="newUrl">
+                </div>
+                <div ng-if="page.list">
+                </div>
+            </url-page>
         </div>
     </content>
+    <script type="text/javascript" src="scripts/svurl.js"></script>
 </body>
 </html>

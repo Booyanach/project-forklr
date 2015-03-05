@@ -24,10 +24,6 @@ header .menu {
     border-left: 1px solid #4D8ECD;
 }
 
-.page {
-    display: none;
-}
-
 header .logo {
     float: left;
     clear: none;
@@ -74,7 +70,11 @@ content .creator, content .result {
     text-align: center;
 }
 
-.page.visible {
+url-page {
+    display: none;
+}
+
+url-page.visible {
     display: block;
 }
 
