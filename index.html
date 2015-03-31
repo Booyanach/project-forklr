@@ -5,42 +5,29 @@
     <link rel="stylesheet" type="text/css" href="css/svurl.css">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js">
     </script>
-    <script
-    src="https://ajax.googleapis.com/ajax/libs/angular_material/0.8.2/angular-material.min.js">
-    </script>
 </head>
-<body ng-app="svurl">
+<body ng-app="svurl" ng-controller="urlController as url">
     <header>
         <img class="logo" src="imgs/dickbutt.png"/>
         <h1> svURL shortener </h1>
         <div class="menu">
-            <div class="button shortener selected" target-url="url">
-                <img src="imgs/dickbutt.png"/>
-            </div>
-            <div class="button charles" target-url="crl">
-                <img src="imgs/charles.jpg"/>
-            </div>
-            <div class="button list" target-url="list">
-                <img src="imgs/charles.jpg"/>
+            <div menu-button ng-repeat="button in url.menu"
+            class="{{button.class}}"
+            img="{{button.img}}"
+            target-url="{{button.targetUrl}}"
+            click-fn="url.switchView">
             </div>
         </div>
     </header>
     <content>
-        <div class="creator page" ng-controller="urlController as url">
-            <url-page ng-repeat="(key, page) in url.pages" class="{{page.visible ? 'visible' : ''}}">
-                <div>
-                    {{key}}
-                </div>
-                <div ng-if="page.input">
-                    <input type="text" name="{{page.input.url}}" class="url" id="{{page.input.url}}">
-                    <input type="button" class="submit" name="submit" target="{{page.input.url}}" value="Shorten!" ng-click="url.insertUrl(page.input.url)">
-                </div>
-                <div ng-if="page.result">
-                    <input type="text" name="result" class="url" id="newUrl">
-                </div>
-                <div ng-if="page.list">
-                </div>
-            </url-page>
+        <div class="creator">
+            <div url-page ng-repeat="(key, page) in url.pages"
+                key="key"
+                page="page"
+                click-fn="url.insertUrl"
+                list-fn="url.getList"
+                routes-fn="url.getRoutes">
+            </div>
         </div>
     </content>
     <script type="text/javascript" src="scripts/svurl.js"></script>

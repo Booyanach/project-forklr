@@ -1,58 +1,3 @@
-// $(function() {
-//     $('.submit').on('click', function () {
-//         var type = 'url';
-//         if ($(this).attr('target') === 'crl') {
-//             type = 'crl';
-//         }
-//         $.post('/insert', {
-//             url: $('#url').val(),
-//             type: type
-//         }, function (response) {
-//             $('#newUrl').val(window.location.origin + '/' + response.type + '/' + response.shortUrl);
-//             $('.result').addClass('visible');
-//             $('.creator').removeClass('visible');
-//         });
-//     });
-
-//     $('.menu .button').on('click', function () {
-
-//         $('.selected').removeClass('selected');
-//         $(this).addClass('selected');
-
-//         $('.page.visible').removeClass('visible');
-//         $('.page.' + $(this).attr('target-url')).addClass('visible');
-
-//         if ($(this).attr('target-url') === 'list') loadList();
-
-//         $('.result').removeClass('visible');
-//         $('.url').val('');
-//     });
-//     $('.menu .button').each(function () {
-//         if ($(this).hasClass('selected')) {
-//             $('.page.' + $(this).attr('target-url')).addClass('visible');
-//         }
-//     });
-
-//     function loadList() {
-//         $.get('/list', {}, function (response) {
-//             console.log(response);
-//             var table = $('<table/>'),
-//                 tbody = $('<tbody/>').appendTo(table);
-
-//                 $.each(response, function (item, idx) {
-//                     if (idx.indexOf('http') > -1) {
-//                         var row = $('<tr/>').appendTo(tbody);
-
-//                             $('<td/>').text(item).appendTo(row);
-//                             $('<td/>').text(idx).appendTo(row);
-//                     }
-//                 });
-
-//                 table.appendTo($('.page.list'));
-//         });
-//     }
-// });
-//
 ((function() {
 
     var urlBuilder = function () {
@@ -63,7 +8,8 @@
 
         svurl.controller('urlController', self.urlController);
 
-        svurl.controller('urlPage', self.pageDirective);
+        svurl.directive('urlPage', self.urlPage);
+        svurl.directive('menuButton', self.menuButton);
 
         return {
             app: svurl
@@ -74,48 +20,166 @@
         var url = this;
 
         url.pages = {
-            "Shortener tool": {
+            "url" : {
+                name: "Shortener tool",
                 visible: true,
                 input: {
                     url: 'url'
                 }
             },
-            "Charles' shortener tool": {
+            "crl" : {
+                name: "Charles' shortener tool",
                 visible: false,
                 input: {
                     url: 'crl'
                 }
             },
-            "your short url is:": {
-                visible: false,
-                result: true
+            "result": {
+                name: "your short url is:",
+                visible: false
             },
-            "All saved URLs": {
-                visible: false,
-                list: true
+            "list": {
+                name: "All saved URLs",
+                visible: false
+            },
+            'routes': {
+                name: "API Routes",
+                visible: false
             }
         };
 
-        url.insertUrl = function (type) {
+        url.menu = [
+            {
+                class: 'shortener',
+                img: 'dickbutt.png',
+                targetUrl: 'url'
+            },
+            {
+                class: 'charles',
+                img: 'charles.jpg',
+                targetUrl: 'crl'
+            },
+            {
+                class: 'list',
+                img: 'dickbutt.png',
+                targetUrl: 'list'
+            },
+            {
+                class: 'routes',
+                img: 'dickbutt.png',
+                targetUrl: 'routes'
+            }
+        ];
+
+        url.insertUrl = function (newUrl, type) {
             apiService.postData({
-                url:'/insert',
+                url:'/' + type,
                 data: {
-                    type: type
+                    url: newUrl
                 }
             }).success(function (response) {
-                // angular.element('#newUrl').val($window.location.origin + '/' + response.type + '/' + response.shortUrl);
-                // angular.element('.result').addClass('visible');
-                // angular.element('.creator').removeClass('visible');
+                url.switchView('your short url is:', function (page) {
+                    if (page.name === "result") {
+                        page.visible = true;
+                        page.value = $window.location.origin + '/' + response.type + '/' + response.shortUrl;
+                    }
+                });
+            });
+        };
+
+        url.loadList = function () {
+            apiService.getData({
+                url: '/url',
+            }).success(function (response) {
+                url.list = response;
+            });
+        };
+
+        url.loadRoutes = function () {
+            apiService.getData({
+                url: '/routes',
+            }).success(function (response) {
+                url.routes = response;
+            });
+        };
+
+        url.getList = function () {
+            return url.list;
+        };
+
+        url.getRoutes = function () {
+            return url.routes;
+        };
+
+        url.loadRoutes();
+        url.loadList();
+
+        // TODO: WORK FROM HERE!, this handles the success callback!
+        url.switchView = function (targetView, cb) {
+            Object.keys(url.pages).forEach(function (page) {
+                url.pages[page].visible = page === targetView ? true : false;
+                if (cb) cb(url.pages[page]);
             });
         };
     };
 
-    urlBuilder.prototype.pageDirective = function () {
+    urlBuilder.prototype.menuButton = function () {
         return {
-            scope: {},
+            scope: {
+                class: '@',
+                img: '@',
+                targetUrl: '@',
+                clickFn: '='
+            },
             link: function (scope, elem, attr) {
-                console.log('pageDirective loaded');
-            }
+            },
+            restrict: 'EAC',
+            replace: true,
+            template: '<div class="button {{class}}" ng-click="clickFn(targetUrl)">' +
+                    '<img ng-src="imgs/{{img}}"/>' +
+                '</div>'
+        };
+    };
+
+    urlBuilder.prototype.urlPage = function ($rootScope) {
+        return {
+            scope: {
+                key: '=',
+                page: '=',
+                clickFn: '=',
+                listFn: '=',
+                routesFn: '='
+            },
+            link: function (scope, elem, attr) {
+                scope.restrictor = ['list', 'routes'];
+                if (scope.restrictor.indexOf(scope.key) > -1) {
+                    scope.isList = true;
+                    scope.$watch(scope[scope.key + 'Fn'], function (newVal) {
+                        if (newVal) {
+                            scope.list = newVal;
+                        }
+                    });
+                }
+            },
+            restrict: 'EAC',
+            replace: false,
+            template: '<div class="page" ng-show="page.visible">' +
+                    '<div>' +
+                        '{{page.name}}' +
+                    '</div>' +
+                    '<div ng-if="page.input">' +
+                        '<input type="text" name="{{page.input.url}}" class="url" id="{{page.input.url}}" ng-model="urlVal">' +
+                        '<input type="button" class="submit" name="submit" target="{{page.input.url}}" value="Shorten!" ng-click="clickFn(urlVal, page.input.url)">' +
+                    '</div>' +
+                    '<div ng-if="page.name === \'result\'">' +
+                        '<input type="text" name="result" class="url" id="newUrl" value="{{page.value}}">' +
+                    '</div>' +
+                    '<div ng-if="isList">' +
+                        '<div ng-repeat="item in list">' +
+                        '{{item}}' +
+                        '</div>' +
+                    '</div>' +
+                '</div>'
         };
     };
 

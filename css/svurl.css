@@ -70,14 +70,6 @@ content .creator, content .result {
     text-align: center;
 }
 
-url-page {
-    display: none;
-}
-
-url-page.visible {
-    display: block;
-}
-
 input {
     margin-top: 20px;
 }
