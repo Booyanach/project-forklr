@@ -13,13 +13,19 @@ app.use(bodyParser.urlencoded());
 // Init the Object
 common.getList();
 
-app.route('/url*')
+app.route('/url')
     .get(svurl.handleGet)
     .post(svurl.handleInsert);
+
+app.route('/url/:name')
+    .get(svurl.handleGet);
 
 app.route('/crl*')
     .get(charles.handleGet)
     .post(charles.handleInsert);
+
+app.route('/crl/:name')
+    .get(charles.handleGet);
 
 app.route('/routes')
     .get(listRoutes);
