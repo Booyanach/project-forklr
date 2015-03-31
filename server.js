@@ -20,7 +20,7 @@ app.route('/url')
 app.route('/url/:name')
     .get(svurl.handleGet);
 
-app.route('/crl*')
+app.route('/crl')
     .get(charles.handleGet)
     .post(charles.handleInsert);
 
@@ -31,11 +31,16 @@ app.route('/routes')
     .get(listRoutes);
 
 function listRoutes(req, res) {
-    var returnArr = app._router.stack.map(function (item) {
-            return (item.route && item.route.path) ? item.route.path : false;
-        }).filter(function (item) {return item ? item : false;});
+    var returnObj = {};
 
-    res.json(returnArr);
+    app._router.stack.map(function (item) {
+        if (item.route && item.route.path) {
+                returnObj[item.route.path] = item.route.stack.map(function(elem){
+                        return elem.method;
+                });
+        }
+    });
+    res.json(returnObj);
 }
 
 app.listen(8087);
