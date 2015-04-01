@@ -19,11 +19,12 @@ exports.handleInsert = function(req, res) {
             shortUrl: checker
         });
     } else {
+        var newName = Math.random().toString(36).substring(6);
         common.redisCli.set('crl:' + newName, req.body.url, function() {
             res.json({
                 message: 'inserted successfuly',
                 type: 'crl',
-                shortUrl: Math.random().toString(36).substring(6)
+                shortUrl: newName
             });
         });
     }

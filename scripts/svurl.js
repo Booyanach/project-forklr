@@ -78,10 +78,10 @@
                     url: newUrl
                 }
             }).success(function (response) {
-                url.switchView('your short url is:', function (page) {
-                    if (page.name === "result") {
-                        page.visible = true;
-                        page.value = $window.location.origin + '/' + response.type + '/' + response.shortUrl;
+                url.switchView('result', function (page, pageObj) {
+                    if (page === "result") {
+                        pageObj.visible = true;
+                        pageObj.value = $window.location.origin + '/' + response.type + '/' + response.shortUrl;
                     }
                 });
             });
@@ -118,7 +118,7 @@
         url.switchView = function (targetView, cb) {
             Object.keys(url.pages).forEach(function (page) {
                 url.pages[page].visible = page === targetView ? true : false;
-                if (cb) cb(url.pages[page]);
+                if (cb) cb(page, url.pages[page]);
             });
         };
     };
@@ -161,6 +161,7 @@
                         }
                     });
                 }
+                console.log(scope.key, scope.page);
             },
             restrict: 'EAC',
             replace: false,
@@ -172,7 +173,7 @@
                         '<input type="text" name="{{page.input.url}}" class="url" id="{{page.input.url}}" ng-model="urlVal">' +
                         '<input type="button" class="submit" name="submit" target="{{page.input.url}}" value="Shorten!" ng-click="clickFn(urlVal, page.input.url)">' +
                     '</div>' +
-                    '<div ng-if="page.name === \'result\'">' +
+                    '<div ng-if="key === \'result\'">' +
                         '<input type="text" name="result" class="url" id="newUrl" value="{{page.value}}">' +
                     '</div>' +
                     '<div ng-if="isList">' +
