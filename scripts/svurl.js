@@ -177,8 +177,8 @@
                     '</div>' +
                     '<div ng-if="isList">' +
                         '<div ng-repeat="(idx, item) in list">' +
-                        '<a ng-if="key === list" href="{{location}}/{{idx}}">{{location}}/{{idx}}</a>' +
-                        '<div ng-if="key === routes">{{location}}{{idx}} | item</div>' +
+                        '<a ng-if="key === \'list\'" href="{{location}}/{{idx}}">{{location}}/{{idx}}</a>' +
+                        '<div ng-if="key === \'routes\'">{{location}}{{idx}} | item</div>' +
                         '</div>' +
                     '</div>' +
                 '</div>'
