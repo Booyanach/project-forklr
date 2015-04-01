@@ -175,8 +175,8 @@
                         '<input type="text" name="result" class="url" id="newUrl" value="{{page.value}}">' +
                     '</div>' +
                     '<div ng-if="isList">' +
-                        '<div ng-repeat="item in list">' +
-                        '{{item}}' +
+                        '<div ng-repeat="(key, item) in list">' +
+                        '{{key}} | {{item}}' +
                         '</div>' +
                     '</div>' +
                 '</div>'
