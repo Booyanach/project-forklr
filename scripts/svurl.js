@@ -176,8 +176,9 @@
                         '<input type="text" name="result" class="url" id="newUrl" value="{{page.value}}">' +
                     '</div>' +
                     '<div ng-if="isList">' +
-                        '<div ng-repeat="(key, item) in list">' +
-                        '<a href="{{location}}{{key}}">{{location}}{{key}}</a>' +
+                        '<div ng-repeat="(idx, item) in list">' +
+                        '<a ng-if="key === list" href="{{location}}/{{idx}}">{{location}}/{{idx}}</a>' +
+                        '<div ng-if="key === routes">{{location}}{{idx}} | item</div>' +
                         '</div>' +
                     '</div>' +
                 '</div>'
