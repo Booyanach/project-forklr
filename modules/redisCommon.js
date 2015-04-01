@@ -5,6 +5,7 @@ var redis = require('redis'),
 exports.getList = function (res, find) {
     var returnObj = {},
         out = true;
+    find = find || '*';
     redisCli.keys(find, function (err, keys) {
         keys.map(function (key, idx) {
             redisCli.get(key, function(err, reply) {

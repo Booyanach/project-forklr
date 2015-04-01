@@ -12,7 +12,7 @@ exports.handleGet = function (req, res) {
             res.redirect(reply);
         });
     } else {
-        common.getList(res, '*');
+        common.getList(res, '[^crl:]*');
     }
 };
 
