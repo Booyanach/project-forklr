@@ -141,7 +141,7 @@
         };
     };
 
-    urlBuilder.prototype.urlPage = function ($rootScope) {
+    urlBuilder.prototype.urlPage = function ($window, $rootScope) {
         return {
             scope: {
                 key: '=',
@@ -152,6 +152,7 @@
             },
             link: function (scope, elem, attr) {
                 scope.restrictor = ['list', 'routes'];
+                scope.location = $window.location.origin;
                 if (scope.restrictor.indexOf(scope.key) > -1) {
                     scope.isList = true;
                     scope.$watch(scope[scope.key + 'Fn'], function (newVal) {
@@ -176,7 +177,7 @@
                     '</div>' +
                     '<div ng-if="isList">' +
                         '<div ng-repeat="(key, item) in list">' +
-                        '{{key}} | {{item}}' +
+                        '{{location}}/{{key}} | {{item}}' +
                         '</div>' +
                     '</div>' +
                 '</div>'
