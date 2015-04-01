@@ -178,8 +178,8 @@
                     '<div ng-if="isList">' +
                         '<div ng-repeat="(idx, item) in list">' +
                             '<a ng-if="key === \'list\'"' +
-                                'href="{{location}}/{{idx.indexOf(\'crl\') > -1 ? idx.replace(\':\', \'/\' : \'url\' + idx)}}">' +
-                                '{{location}}/{{idx.indexOf(\'crl\') > -1 ? idx.replace(\':\', \'/\' : \'url\' + idx)}}' +
+                                'href="{{location}}/{{idx.indexOf(\'crl\') > -1 ? idx.replace(\':\', \'/\') : \'url\' + idx}}">' +
+                                '{{location}}/{{idx.indexOf(\'crl\') > -1 ? idx.replace(\':\', \'/\') : \'url\' + idx}}' +
                             '</a>' +
                             '<div ng-if="key === \'routes\'">{{location}}{{idx}} | item</div>' +
                         '</div>' +
