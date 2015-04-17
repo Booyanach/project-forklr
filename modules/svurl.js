@@ -9,7 +9,7 @@ String.prototype.capitalize = function () {
 exports.handleGet = function (req, res) {
     if (req.params.name) {
         common.redisCli.get(req.params.name, function(err, reply) {
-            res.redirect(reply);
+            res.redirect(sanitizeUrl(reply));
         });
     } else {
         common.getList(res, '[^crl:]*');
@@ -17,9 +17,10 @@ exports.handleGet = function (req, res) {
 };
 
 exports.handleInsert = function(req, res) {
-    var checker = common.existsInRedis(req.body.url);
+    var sanitize = sanitizeUrl(req.body.url);
+    var checker = common.existsInRedis(sanitize);
 
-    if (req.body.url && checker) {
+    if (sanitize && checker) {
         res.json({
             message: 'Already exists',
             shortUrl: checker
@@ -30,7 +31,7 @@ exports.handleInsert = function(req, res) {
                 return text.capitalize();
             }).join('');
 
-        common.redisCli.set(newName, req.body.url, function() {
+        common.redisCli.set(newName, sanitize, function() {
             res.json({
                 message: 'inserted successfuly',
                 type: 'url',
@@ -40,3 +41,11 @@ exports.handleInsert = function(req, res) {
     }
     common.getList();
 };
+
+function sanitizeUrl(url){
+    var regex = new RegExp('http://');
+    if (!regex.test(url)) {
+        url = 'http://' + url;
+    }
+    return url;
+}
