@@ -43,7 +43,7 @@ exports.handleInsert = function(req, res) {
 };
 
 function sanitizeUrl(url){
-    var regex = new RegExp('http://');
+    var regex = new RegExp(/(http|https):\/\//g);
     if (!regex.test(url)) {
         url = 'http://' + url;
     }
