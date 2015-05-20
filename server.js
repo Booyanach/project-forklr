@@ -1,10 +1,13 @@
 var express = require('express'),
     app = express(),
     bodyParser = require('body-parser'),
+    mongoose = require('mongoose'),
     common = require('./modules/redisCommon'),
     svurl = require('./modules/svurl'),
+    svimg = require('./modules/svimg'),
     charles = require('./modules/charles');
 
+mongoose.connect('mongodb://localhost:27017/svurl');
 
 app.use(express.static(__dirname, '/'));
 app.use(bodyParser.json());
@@ -29,6 +32,10 @@ app.route('/crl/:name')
 
 app.route('/routes')
     .get(listRoutes);
+
+app.route('/img')
+    .get(svimg.handleGet)
+    .post(svimg.handleInsert);
 
 function listRoutes(req, res) {
     var returnObj = {};

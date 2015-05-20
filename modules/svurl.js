@@ -1,4 +1,5 @@
-var common = require('./redisCommon'),
+var common = require('./dbCommon'),
+    Svurl = require('../models/url'),
     words = require('./words'),
     rant = require('rantjs');
 
@@ -8,17 +9,17 @@ String.prototype.capitalize = function () {
 
 exports.handleGet = function (req, res) {
     if (req.params.name) {
-        common.redisCli.get(req.params.name, function(err, reply) {
-            res.redirect(sanitizeUrl(reply));
+        Svurl.findOne({name: req.params.name}, function (err, reply) {
+            res.redirect(common.sanitizeUrl(reply));
         });
     } else {
-        common.getList(res, '[^crl:]*');
+        common.list(res, Svurl);
     }
 };
 
 exports.handleInsert = function(req, res) {
-    var sanitize = sanitizeUrl(req.body.url);
-    var checker = common.existsInRedis(sanitize);
+    var sanitize = common.sanitizeUrl(req.body.url),
+        checker = common.exists(sanitize);
 
     if (sanitize && checker) {
         res.json({
@@ -29,9 +30,14 @@ exports.handleInsert = function(req, res) {
         var newName = rant(words.generateString()).split(' ').map(function (text) {
                 text = text.replace(/[^a-zA-Z0-9 -]/g, "");
                 return text.capitalize();
-            }).join('');
+            }).join(''),
 
-        common.redisCli.set(newName, sanitize, function() {
+            svurl = new Svurl({
+            path: sanitize,
+            name: newName
+        });
+
+        svurl.save(function () {
             res.json({
                 message: 'inserted successfuly',
                 type: 'url',
@@ -39,13 +45,4 @@ exports.handleInsert = function(req, res) {
             });
         });
     }
-    common.getList();
 };
-
-function sanitizeUrl(url){
-    var regex = new RegExp(/(http|https):\/\//g);
-    if (!regex.test(url)) {
-        url = 'http://' + url;
-    }
-    return url;
-}

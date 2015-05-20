@@ -87,6 +87,10 @@ input.url {
     border-bottom-right-radius: 0;
 }
 
+input.url[type=file] {
+  padding: 12px 15px;
+}
+
 input.url[name="result"] {
     width: 100%;
     box-sizing: border-box;

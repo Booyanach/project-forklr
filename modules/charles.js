@@ -1,18 +1,19 @@
-var common = require('./redisCommon');
+var common = require('./dbCommon'),
+    Crl = require('../models/crl');
 
 exports.handleGet = function (req, res) {
     if (req.params.name) {
-        common.redisCli.get('crl:' + req.params.name, function(err, reply) {
-            res.redirect(sanitizeUrl(reply));
+        Crl.findOne({name: req.params.name}, function (err, reply) {
+            res.redirect(common.sanitizeUrl(reply));
         });
     } else {
-        common.getList(res, 'crl:*');
+        common.list(res, Crl);
     }
 };
 
 exports.handleInsert = function(req, res) {
-    var sanitize = sanitizeUrl(req.body.url),
-        checker = common.existsInRedis(sanitize);
+    var sanitize = common.sanitizeUrl(req.body.url),
+        checker = common.exists(sanitize);
 
     if (sanitize && checker) {
         res.json({
@@ -20,8 +21,14 @@ exports.handleInsert = function(req, res) {
             shortUrl: checker
         });
     } else {
-        var newName = Math.random().toString(36).substring(6);
-        common.redisCli.set('crl:' + newName, sanitize, function() {
+        var newName = Math.random().toString(36).substring(6),
+
+            crl = new Svurl({
+            path: sanitize,
+            name: newName
+        });
+
+        crl.save(function () {
             res.json({
                 message: 'inserted successfuly',
                 type: 'crl',
@@ -29,13 +36,4 @@ exports.handleInsert = function(req, res) {
             });
         });
     }
-    common.getList();
 };
-
-function sanitizeUrl(url){
-    var regex = new RegExp(/(http|https):\/\//g);
-    if (!regex.test(url)) {
-        url = 'http://' + url;
-    }
-    return url;
-}

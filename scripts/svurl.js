@@ -34,6 +34,14 @@
                     url: 'crl'
                 }
             },
+            "img" : {
+                name: "Image upload tool",
+                fileModel: "svImg",
+                visible: false,
+                input: {
+                    url: 'img'
+                }
+            },
             "result": {
                 name: "your short url is:",
                 visible: false
@@ -60,6 +68,11 @@
                 targetUrl: 'crl'
             },
             {
+                class: 'img',
+                img: 'charles.jpg',
+                targetUrl: 'img'
+            },
+            {
                 class: 'list',
                 img: 'dickbutt.png',
                 targetUrl: 'list'
@@ -82,6 +95,21 @@
                     if (page === "result") {
                         pageObj.visible = true;
                         pageObj.value = $window.location.origin + '/' + response.type + '/' + response.shortUrl;
+                    }
+                });
+            });
+        };
+
+        url.uploadImg = function (file) {
+            apiService.postImg({
+                url:'/img',
+                data: {},
+                file: file
+            }).success(function (response) {
+                url.switchView('result', function (page, pageObj) {
+                    if (page === "result") {
+                        pageObj.visible = true;
+                        pageObj.value = $window.location.origin + '/img/' + response.shortUrl;
                     }
                 });
             });
@@ -141,18 +169,31 @@
         };
     };
 
-    urlBuilder.prototype.urlPage = function ($window, $rootScope) {
+    urlBuilder.prototype.urlPage = function ($window, $rootScope, $parse) {
         return {
             scope: {
                 key: '=',
                 page: '=',
                 clickFn: '=',
+                imgFn: '=',
                 listFn: '=',
-                routesFn: '='
+                routesFn: '=',
+                fileModel: '='
             },
             link: function (scope, elem, attr) {
+                if (scope.fileModel) {
+                    elem.bind('change', function () {
+                        scope.$apply(function () {
+                            console.log($parse(attr.fileModel).assign(scope, elem.find('input')[0].files[0]));
+                        });
+                    });
+                }
                 scope.restrictor = ['list', 'routes'];
                 scope.location = $window.location.origin;
+
+                scope.isFile =  scope.fileModel ? 'file' : 'text';
+                scope.clickFn =  scope.fileModel ? scope.imgFn : scope.clickFn;
+
                 if (scope.restrictor.indexOf(scope.key) > -1) {
                     scope.isList = true;
                     scope.$watch(scope[scope.key + 'Fn'], function (newVal) {
@@ -161,7 +202,6 @@
                         }
                     });
                 }
-                console.log(scope.key, scope.page);
             },
             restrict: 'EAC',
             replace: false,
@@ -170,7 +210,7 @@
                         '{{page.name}}' +
                     '</div>' +
                     '<div ng-if="page.input">' +
-                        '<input type="text" name="{{page.input.url}}" class="url" id="{{page.input.url}}" ng-model="urlVal">' +
+                        '<input type="{{isFile}}" name="{{page.input.url}}" class="url" id="{{page.input.url}}" ng-model="urlVal">' +
                         '<input type="button" class="submit" name="submit" target="{{page.input.url}}" value="Shorten!" ng-click="clickFn(urlVal, page.input.url)">' +
                     '</div>' +
                     '<div ng-if="key === \'result\'">' +
@@ -200,9 +240,19 @@
             return $http.post(data.url, sendData);
         }
 
+        function postImg(data) {
+            var sendData = data || {};
+            return $http.post(data.url, sendData, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            });
+        }
+
         return {
             getData: getData,
-            postData: postData
+            postData: postData,
+            postImg: postImg,
+            getImg: getData
         };
     };
 
