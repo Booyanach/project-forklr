@@ -181,18 +181,11 @@
                 fileModel: '='
             },
             link: function (scope, elem, attr) {
-                if (scope.fileModel) {
-                    elem.bind('change', function () {
-                        scope.$apply(function () {
-                            console.log($parse(attr.fileModel).assign(scope, elem.find('input')[0].files[0]));
-                        });
-                    });
-                }
                 scope.restrictor = ['list', 'routes'];
                 scope.location = $window.location.origin;
 
                 scope.isFile =  scope.fileModel ? 'file' : 'text';
-                scope.clickFn =  scope.fileModel ? scope.imgFn : scope.clickFn;
+                scope.clickFn =  scope.fileModel ? handleImg : scope.clickFn;
 
                 if (scope.restrictor.indexOf(scope.key) > -1) {
                     scope.isList = true;
@@ -201,6 +194,20 @@
                             scope.list = newVal;
                         }
                     });
+                }
+
+                function handleImg() {
+                    if (scope.fileModel) {
+                        var file = elem.find('input')[0].files[0],
+                            r = new FileReader();
+                        r.onloadend = function (e) {
+                            scope.imgFn(e.target.result);
+                        };
+
+                        r.readAsArrayBuffer(file);
+                        console.log(file);
+
+                    }
                 }
             },
             restrict: 'EAC',

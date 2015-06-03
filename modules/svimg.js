@@ -13,6 +13,7 @@ exports.handleGet = function (req, res) {
 
 exports.handleInsert = function(req, res) {
     console.log(req.body);
+    res.json({'success':'success'});
     // var sanitize = common.sanitizeUrl(req.body.url),
     //     checker = common.exists(sanitize);
 

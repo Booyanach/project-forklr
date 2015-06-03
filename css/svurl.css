@@ -5,7 +5,7 @@
 }
 
 body {
-    background-color: #4D8ECD;
+    background-color: #FAFAFA;
 }
 
 header {
@@ -13,7 +13,7 @@ header {
     height: 40px;
     padding: 15px;
     line-height: 40px;
-    border-bottom: 2px solid #656565;
+    border-bottom: 5px solid #656565;
     background-color: #242424;
 }
 
@@ -21,7 +21,6 @@ header .menu {
     float: right;
     margin: -15px;
     padding: 17px;
-    border-left: 1px solid #4D8ECD;
 }
 
 header .logo {
@@ -48,6 +47,7 @@ header h1 {
     text-align: center;
     line-height: 25px;
     border-radius: 3px;
+    transition: all 0.4s;
 }
 
 .button img {
@@ -64,7 +64,7 @@ header h1 {
 
 content .creator, content .result {
     width: 900px;
-    color: #FFFFFF;
+    color: #575757;
     margin: 150px auto;
     font-size: 42px;
     text-align: center;
@@ -77,12 +77,13 @@ input {
 input.url {
     width: 757px;
     float: left;
-    border: 0;
+    border: 2px solid #565656;
     padding: 15px;
     font-size: 22px;
     font-weight: 600;
+    border-right: 0;
     border-radius: 5px;
-    background-color: #FFFFFF;
+    background-color: #FFF;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
 }
@@ -99,21 +100,22 @@ input.url[name="result"] {
 
 input.submit {
     float: right;
-    color: #656565;
-    border: 0;
-    padding: 15px;
+    color: #CDCDCD;
+    border: 2px solid #565656;
+    padding: 15px 13px;
     font-size: 22px;
-    border-left: 1px solid #F2F2F2;
+    border-left: 1px solid #565656;
     border-radius: 5px;
-    background-color: #FFFFFF;
+    background-color: #565656;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
+    transition: all 0.4s;
 }
 
 input.submit:hover {
-    color: #353535;
+    color: #DDDDDD;
     cursor: pointer;
-    background-color: #F2F2F2;
+    background-color: #464646;
 }
 
 .result {
