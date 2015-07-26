@@ -1,0 +1,129 @@
+@font-face {
+  font-family: 'FontAwesome';
+  src: url('//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/fonts/fontawesome-webfont.eot');
+  src: url('//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/fonts/fontawesome-webfont.eot') format('embedded-opentype'), url('//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/fonts/fontawesome-webfont.woff2') format('woff2'), url('//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/fonts/fontawesome-webfont.woff') format('woff'), url('//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/fonts/fontawesome-webfont.ttf') format('truetype'), url('//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/fonts/fontawesome-webfont.svg') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+* {
+  margin: 0;
+  padding: 0;
+  font-family: Helvetica, Calibri, Arial, sans-serif;
+}
+body {
+  background-color: #FAFAFA;
+}
+header {
+  color: #FFF;
+  height: 40px;
+  padding: 15px;
+  box-shadow: 0 2px 2px #9B9B9B;
+  line-height: 40px;
+  background-color: #242424;
+}
+header .menu {
+  float: right;
+  margin: -15px;
+  padding: 17px;
+}
+header .menu .button {
+  float: left;
+  width: 25px;
+  height: 25px;
+  margin: 5px;
+  border: 1px solid #FFFFFF;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.4s;
+  line-height: 25px;
+  font-family: FontAwesome, sans-serif;
+  border-radius: 3px;
+}
+header .menu .button.shortener:before {
+  content: "\f0c1";
+}
+header .menu .button.charles:before {
+  content: "\f066";
+}
+header .menu .button.img:before {
+  content: "\f03e";
+}
+header .menu .button.list:before {
+  content: "\f03a";
+}
+header .menu .button.routes:before {
+  content: "\f135";
+}
+header .menu .button:hover,
+header .menu .button.selected {
+  border-color: #959595;
+  background-color: #DB6539;
+}
+header .logo {
+  float: left;
+  clear: none;
+  height: 40px;
+  margin: 0 20px;
+}
+header h1 {
+  clear: none;
+  width: auto;
+  float: left;
+}
+content .creator,
+content .result {
+  width: 900px;
+  color: #575757;
+  margin: 150px auto;
+  font-size: 42px;
+  text-align: center;
+}
+input {
+  margin-top: 20px;
+  box-shadow: 0 2px 2px #9B9B9B;
+}
+input.url {
+  width: 83%;
+  float: left;
+  border: 2px solid #565656;
+  padding: 15px;
+  font-size: 22px;
+  box-sizing: border-box;
+  font-weight: 600;
+  border-right: 0;
+  border-radius: 5px;
+  background-color: #FFF;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+input.url[type=file] {
+  padding: 12px 15px;
+}
+input.url[name="result"] {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 5px;
+}
+input.submit {
+  width: 17%;
+  float: right;
+  color: #CDCDCD;
+  border: 2px solid #565656;
+  padding: 15px 13px;
+  font-size: 22px;
+  box-sizing: border-box;
+  border-left: 1px solid #565656;
+  border-radius: 5px;
+  background-color: #565656;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  transition: all 0.4s;
+}
+input.submit:hover {
+  color: #DDDDDD;
+  cursor: pointer;
+  background-color: #464646;
+}
+.result {
+  display: none;
+}

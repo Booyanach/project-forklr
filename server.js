@@ -2,8 +2,9 @@ var express = require('express'),
     app = express(),
     bodyParser = require('body-parser'),
     mongoose = require('mongoose'),
-    common = require('./modules/redisCommon'),
+    common = require('./modules/dbCommon'),
     svurl = require('./modules/svurl'),
+    core = require('./modules/core'),
     svimg = require('./modules/svimg'),
     charles = require('./modules/charles');
 
@@ -14,13 +15,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 
 // Init the Object
-common.getList();
+//common.list();
 
-app.route('/url')
+app.route('/urls')
     .get(svurl.handleGet)
     .post(svurl.handleInsert);
 
-app.route('/url/:name')
+app.route('/urls/:name')
     .get(svurl.handleGet);
 
 app.route('/crl')
@@ -36,6 +37,9 @@ app.route('/routes')
 app.route('/img')
     .get(svimg.handleGet)
     .post(svimg.handleInsert);
+
+app.route('/core')
+    .get(core.handleGet);
 
 function listRoutes(req, res) {
     var returnObj = {};

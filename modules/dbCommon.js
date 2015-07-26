@@ -3,13 +3,14 @@ var db = require('mongoose'),
     cacheObj = {};
 
 exports.list = function (res, type) {
-    type.find(function (err, users) {
+    type.find(function (err, components) {
         if (err) res.json(handler.onerror('failed to list ' + type.type + '!', err));
-        res.json(handler.onreturn(users));
+        cacheObj = components;
+        res.json(handler.onreturn(components));
     });
 };
 
-exports.exists = function (res, type) {
+exports.exists = function () {
     var returnKey = '';
     Object.keys(cacheObj).filter(function (key) {
         if (cacheObj[key] === url) returnKey = key;

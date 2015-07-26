@@ -1,0 +1,22 @@
+<div class="page" ng-show="page.visible">
+    <div>
+        {{page.name}}
+    </div>
+    <div ng-if="page.input">
+        <input type="{{isFile}}" name="{{page.input.url}}" class="url" id="{{page.input.url}}" ng-model="urlVal">
+        <input type="button" class="submit" name="submit" target="{{page.input.url}}"
+               value="Shorten!" ng-click="clickFn(urlVal, page.input.url)">
+    </div>
+    <div ng-if="key === 'result'">
+        <input type="text" name="result" class="url" id="newUrl" value="{{page.value}}">
+        </div>
+    <div ng-if="isList">
+        <div ng-repeat="(idx, item) in list">
+            <a ng-if="key === 'list'"
+                href="{{location}}/{{idx.indexOf('crl') > -1 ? idx.replace(':', '/') : 'url/' + idx}}">
+                {{location}}/{{idx.indexOf('crl') > -1 ? idx.replace(':', '/') : 'url/' + idx}}
+            </a>
+            <div ng-if="key === 'routes'">{{location}}{{idx}} | item</div>
+        </div>
+    </div>
+</div>
