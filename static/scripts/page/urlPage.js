@@ -9,8 +9,6 @@ define([
                 page: '=',
                 clickFn: '=',
                 imgFn: '=',
-                listFn: '=',
-                routesFn: '=',
                 fileModel: '='
             },
             link: function (scope, elem, attr) {
@@ -19,6 +17,8 @@ define([
 
                 scope.isFile =  scope.fileModel ? 'file' : 'text';
                 scope.clickFn =  scope.fileModel ? handleImg : scope.clickFn;
+
+                console.log(elem.length, scope.fileModel);
 
                 if (scope.restrictor.indexOf(scope.key) > -1) {
                     scope.isList = true;
@@ -31,6 +31,7 @@ define([
 
                 function handleImg() {
                     if (scope.fileModel) {
+                        console.log(elem);
                         var file = elem.find('input')[0].files[0],
                             r = new FileReader();
                         r.onloadend = function (e) {
@@ -38,7 +39,6 @@ define([
                         };
 
                         r.readAsArrayBuffer(file);
-                        console.log(file);
 
                     }
                 }

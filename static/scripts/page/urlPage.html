@@ -1,11 +1,11 @@
-<div class="page" ng-show="page.visible">
+<div class="page" ng-if="page.visible">
     <div>
         {{page.name}}
     </div>
     <div ng-if="page.input">
         <input type="{{isFile}}" name="{{page.input.url}}" class="url" id="{{page.input.url}}" ng-model="urlVal">
         <input type="button" class="submit" name="submit" target="{{page.input.url}}"
-               value="Shorten!" ng-click="clickFn(urlVal, page.input.url)">
+               value="Shorten!" ng-click="clickFn(urlVal, page.input.url)" ng-class="fileModel">
     </div>
     <div ng-if="key === 'result'">
         <input type="text" name="result" class="url" id="newUrl" value="{{page.value}}">

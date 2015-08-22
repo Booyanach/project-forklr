@@ -1,8 +1,7 @@
 define([
     'pageModule',
     'apiService',
-    'urlPage',
-    'menuButton'
+    'urlPage'
 ], function (module) {
     "use strict";
     var pageController = function ($window, apiService) {

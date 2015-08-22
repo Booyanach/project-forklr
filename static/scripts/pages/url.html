@@ -1,0 +1,10 @@
+<div class="page" ng-controller="urlController as page">
+    <div>
+        {{page.name}}
+    </div>
+    <div>
+        <input type="text" name="{{page.input.url}}" class="url" id="{{page.input.url}}" ng-model="urlVal">
+        <input type="button" class="submit" name="submit" target="{{page.input.url}}"
+               value="Shorten!" ng-click="clickFn(urlVal, page.input.url)">
+    </div>
+</div>

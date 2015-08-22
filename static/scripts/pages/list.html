@@ -1,0 +1,12 @@
+<div class="page">
+    <div>
+        {{page.name}}
+    </div>
+    <div>
+        <div ng-repeat="(idx, item) in list">
+            <a href="{{location}}/{{idx.indexOf('crl') > -1 ? idx.replace(':', '/') : 'url/' + idx}}">
+                {{location}}/{{idx.indexOf('crl') > -1 ? idx.replace(':', '/') : 'url/' + idx}}
+            </a>
+        </div>
+    </div>
+</div>

@@ -11,25 +11,20 @@
     <header>
         <img class="logo" src="./static/imgs/logo.png"/>
         <div class="menu">
-            <div menu-button ng-repeat="button in page.menu"
-            class="{{button.class}}"
-            target-url="{{button.targetUrl}}"
-            click-fn="page.switchView">
-            </div>
+            <a ng-repeat="button in page.menu" class="button" ng-class="button.class"
+            ui-sref="{{button.targetUrl}}"></a>
         </div>
     </header>
-    <content>
-        <div class="creator">
-            <div url-page ng-repeat="(key, view) in page.pages"
-                key="key"
-                page="view"
-                click-fn="page.insertUrl"
-                img-fn="page.uploadImg"
-                file-model="view.fileModel"
-                list-fn="page.getList"
-                routes-fn="page.getRoutes">
-            </div>
-        </div>
+    <content ui-view>
+        <!--<div class="creator">-->
+            <!--<div url-page ng-repeat="(key, view) in page.pages"-->
+                <!--key="key"-->
+                <!--page="view"-->
+                <!--click-fn="page.insertUrl"-->
+                <!--img-fn="page.uploadImg"-->
+                <!--file-model="view.fileModel">-->
+            <!--</div>-->
+        <!--</div>-->
     </content>
 </body>
 </html>
